@@ -1,0 +1,28 @@
+version: '3.3'
+
+services:
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.5.4
+    ports:
+      - "5601:5601"
+    configs:
+      - source: kibana_config
+        target: /usr/share/kibana/config/kibana.yml
+    networks:
+      - kibana
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+
+configs:
+
+  kibana_config:
+    file: ./kibana/config/kibana.yml
+
+networks:
+  kibana:
+    driver: overlay
